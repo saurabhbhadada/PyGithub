@@ -2109,6 +2109,7 @@ class Repository(github.GithubObject.CompletableGithubObject):
             url_parameters["base"] = base
         if head is not github.GithubObject.NotSet:
             url_parameters["head"] = head
+        url_parameters["per_page"] = 100
         return github.PaginatedList.PaginatedList(
             github.PullRequest.PullRequest,
             self._requester,
