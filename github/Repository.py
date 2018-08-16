@@ -1862,6 +1862,7 @@ class Repository(github.GithubObject.CompletableGithubObject):
         assert since is github.GithubObject.NotSet or isinstance(since, datetime.datetime), since
         assert creator is github.GithubObject.NotSet or isinstance(creator, github.NamedUser.NamedUser) or isinstance(creator, (str, unicode)), creator
         url_parameters = dict()
+        url_parameters["per_page"] = 100
         if milestone is not github.GithubObject.NotSet:
             if isinstance(milestone, (str, unicode)):
                 url_parameters["milestone"] = milestone
