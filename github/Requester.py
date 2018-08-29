@@ -277,7 +277,7 @@ class Requester:
 
     def requestBlobAndCheck(self, verb, url, parameters=None, headers=None, input=None):
         return self.__check(*self.requestBlob(verb, url, parameters, headers, input, self.__customConnection(url)))
-    
+
     def __check(self, status, responseHeaders, output):
         output = self.__structuredFromJson(output)
         if status >= 400:
