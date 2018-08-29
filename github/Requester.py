@@ -282,7 +282,7 @@ class Requester:
         output = self.__structuredFromJson(output)
         if status >= 400:
             raise self.__createException(status, responseHeaders, output)
-        return 
+        return responseHeaders, output
 
     def __customConnection(self, url):
         cnx = None
