@@ -65,8 +65,10 @@ from io import IOBase
 
 import Consts
 import GithubException
+from time import sleep
 
 atLeastPython3 = sys.hexversion >= 0x03000000
+MAX_TRIES = 3
 
 
 class RequestsResponse:
@@ -257,19 +259,30 @@ class Requester:
         self.__verify = verify
 
     def requestJsonAndCheck(self, verb, url, parameters=None, headers=None, input=None):
-        return self.__check(*self.requestJson(verb, url, parameters, headers, input, self.__customConnection(url)))
+        tries = 0
+        retry = true
+        while tries < MAX_TRIES and retry:
+            retry = false
+            try:
+                responseHeaders, output = self.__check(*self.requestJson(verb, url, parameters, headers, input, self.__customConnection(url)))
+            except:
+                retry = true
+                tries += 1
+                if (tries >= MAX_TRIES):
+                    print('Try limit exceeded, request failed after ' + str(MAX_TRIES) + ' tries.')
+        return responseHeaders, output
 
     def requestMultipartAndCheck(self, verb, url, parameters=None, headers=None, input=None):
         return self.__check(*self.requestMultipart(verb, url, parameters, headers, input, self.__customConnection(url)))
 
     def requestBlobAndCheck(self, verb, url, parameters=None, headers=None, input=None):
         return self.__check(*self.requestBlob(verb, url, parameters, headers, input, self.__customConnection(url)))
-
+    
     def __check(self, status, responseHeaders, output):
         output = self.__structuredFromJson(output)
         if status >= 400:
             raise self.__createException(status, responseHeaders, output)
-        return responseHeaders, output
+        return 
 
     def __customConnection(self, url):
         cnx = None
