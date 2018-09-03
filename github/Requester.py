@@ -65,8 +65,10 @@ from io import IOBase
 
 import Consts
 import GithubException
+from time import sleep
 
 atLeastPython3 = sys.hexversion >= 0x03000000
+MAX_TRIES = 3
 
 
 class RequestsResponse:
@@ -257,7 +259,20 @@ class Requester:
         self.__verify = verify
 
     def requestJsonAndCheck(self, verb, url, parameters=None, headers=None, input=None):
-        return self.__check(*self.requestJson(verb, url, parameters, headers, input, self.__customConnection(url)))
+        tries = 0
+        retry = True
+        while tries < MAX_TRIES and retry:
+            retry = False
+            try:
+                responseHeaders, output = self.__check(*self.requestJson(verb, url, parameters, headers, input, self.__customConnection(url)))
+            except:
+                retry = True
+                tries += 1
+                print('retrying. tries =' + str(tries)) 
+                if (tries >= MAX_TRIES):
+                    print('Try limit exceeded, request failed after ' + str(MAX_TRIES) + ' tries.')
+                    sys.exit()
+        return responseHeaders, output
 
     def requestMultipartAndCheck(self, verb, url, parameters=None, headers=None, input=None):
         return self.__check(*self.requestMultipart(verb, url, parameters, headers, input, self.__customConnection(url)))
