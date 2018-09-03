@@ -70,6 +70,18 @@ from time import sleep
 atLeastPython3 = sys.hexversion >= 0x03000000
 MAX_TRIES = 3
 
+class RetryLimitExceeded(Exception):
+    """Exception raised for errors in the input.
+
+    Attributes:
+        expression -- input expression in which the error occurred
+        message -- explanation of the error
+    """
+
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
+
 
 class RequestsResponse:
     # mimic the httplib response object
@@ -268,10 +280,11 @@ class Requester:
             except:
                 retry = True
                 tries += 1
+                sleep(5)
                 print('retrying. tries =' + str(tries)) 
                 if (tries >= MAX_TRIES):
                     print('Try limit exceeded, request failed after ' + str(MAX_TRIES) + ' tries.')
-                    sys.exit()
+                    raise RetryLimitExceeded(tries, "Retry Limit Exceeded. Something is wrong with Server. MAX TRIES ="+str(MAX_TRIES))
         return responseHeaders, output
 
     def requestMultipartAndCheck(self, verb, url, parameters=None, headers=None, input=None):
