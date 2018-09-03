@@ -260,7 +260,7 @@ class Requester:
 
     def requestJsonAndCheck(self, verb, url, parameters=None, headers=None, input=None):
         tries = 0
-        retry = true
+        retry = True
         while tries < MAX_TRIES and retry:
             retry = false
             try:
