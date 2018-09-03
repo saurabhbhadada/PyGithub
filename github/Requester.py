@@ -261,7 +261,6 @@ class Requester:
     def requestJsonAndCheck(self, verb, url, parameters=None, headers=None, input=None):
         tries = 0
         retry = True
-        responseHeaders, output = None, None
         while tries < MAX_TRIES and retry:
             retry = False
             try:
@@ -271,6 +270,7 @@ class Requester:
                 tries += 1
                 if (tries >= MAX_TRIES):
                     print('Try limit exceeded, request failed after ' + str(MAX_TRIES) + ' tries.')
+                    sys.exit()
         return responseHeaders, output
 
     def requestMultipartAndCheck(self, verb, url, parameters=None, headers=None, input=None):
