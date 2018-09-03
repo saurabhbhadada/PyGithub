@@ -262,7 +262,7 @@ class Requester:
         tries = 0
         retry = True
         while tries < MAX_TRIES and retry:
-            retry = false
+            retry = False
             try:
                 responseHeaders, output = self.__check(*self.requestJson(verb, url, parameters, headers, input, self.__customConnection(url)))
             except:
