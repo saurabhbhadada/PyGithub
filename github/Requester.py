@@ -268,6 +268,7 @@ class Requester:
             except:
                 retry = True
                 tries += 1
+                print('retrying. tries =' + str(tries)) 
                 if (tries >= MAX_TRIES):
                     print('Try limit exceeded, request failed after ' + str(MAX_TRIES) + ' tries.')
                     sys.exit()
