@@ -261,6 +261,7 @@ class Requester:
     def requestJsonAndCheck(self, verb, url, parameters=None, headers=None, input=None):
         tries = 0
         retry = True
+        responseHeaders, output = None, None
         while tries < MAX_TRIES and retry:
             retry = False
             try:
