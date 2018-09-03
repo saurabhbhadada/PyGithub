@@ -266,7 +266,7 @@ class Requester:
             try:
                 responseHeaders, output = self.__check(*self.requestJson(verb, url, parameters, headers, input, self.__customConnection(url)))
             except:
-                retry = true
+                retry = True
                 tries += 1
                 if (tries >= MAX_TRIES):
                     print('Try limit exceeded, request failed after ' + str(MAX_TRIES) + ' tries.')
